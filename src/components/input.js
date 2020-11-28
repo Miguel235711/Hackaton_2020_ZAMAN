@@ -1,7 +1,7 @@
 import React, { useState} from "react";
 
 import { 
-    MailInput_Validation, 
+    ShortTextInput_Validation
 } from './Validator';
 
 export function MailInput(props) {
@@ -20,7 +20,7 @@ export function MailInput(props) {
                 onKeyPress={ (props.onKeyPress) ? props.onKeyPress : null }
                 onChange={ (event) => {
                     if(props.validate) {
-                        const valid = MailInput_Validation(event.target.value)
+                        const valid = ShortTextInput_Validation(event.target.value)
                         if (valid === true) {
                             setValidationMessage('')
                             props.onChange( event.target, true)

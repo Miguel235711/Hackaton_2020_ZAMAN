@@ -1,6 +1,5 @@
-export const MailInput_Validation = (value) => {
-    
-    if(ShortTextInput_Validation(value) && /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(value)) 
+export const ShortTextInput_Validation = (value) => {
+    if(value.length <= 100 && value.length > 0) 
         return true;
     return false;
 }

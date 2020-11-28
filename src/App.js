@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 
 import{
@@ -20,13 +21,14 @@ import * as fotoActions from './dataManager/foto/fotoActions';
   }
 
   postFoto() {
-
-    // post
     const info = this.state
+    // post
+    
+    
   }
 
   showFotos() {
-    return fotos.map(item => (
+    return this.props.fotos.map(item => (
       <tr>
         <th className="sb-table-content"><span>{item.nombre}</span></th>
       </tr>
