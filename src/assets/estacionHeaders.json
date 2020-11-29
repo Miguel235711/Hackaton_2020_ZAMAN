@@ -1,0 +1,34 @@
+[
+    {
+        "id": "IDLocalidad",
+        "title" : "ID Localidad"
+    },
+    {
+        "id": "Localidad",
+        "title" : "Localidad"
+    },
+    {
+        "id": "NumeroEstacion",
+        "title" : "Numero de estacion"
+    },
+    {
+        "id": "Provincia",
+        "title" : "Provincia"
+    },
+    {
+        "id": "RegionAdministrativa",
+        "title" : "Region Administrativa"
+    },
+    {
+        "id": "Pais",
+        "title" : "País"
+    },
+    {
+        "id": "Tipo",
+        "title" : "Tipo"
+    },
+    {
+        "id": "Notas",
+        "title" : "Notas"
+    }
+]

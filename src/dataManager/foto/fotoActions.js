@@ -1,7 +1,8 @@
 import firebase from '../../firebase';
 import {
     GET_FOTOS,
-    ADD_FOTO
+    ADD_FOTO,
+    SET_UPLOADED_FOTOS
 } from './fotoTypes';
 
 
@@ -32,4 +33,12 @@ export const fetchFotos =  () => async dispatch =>{
     const photos = (await getFotoRef().get()).docs.map((foto)=>foto.data())
     console.log(`photos: ${photos}`)
     dispatch({type: GET_FOTOS,payload: photos})
+}
+
+export const setUploadedFotos = (fotos) => dispatch => {
+    
+    dispatch({
+        type: SET_UPLOADED_FOTOS,
+        payload: fotos
+    })
 }

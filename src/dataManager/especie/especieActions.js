@@ -22,14 +22,14 @@ const getEspecieRef = ()=> firebase.firestore().collection('especie').withConver
 
 export const addEspecie = (especie) => async dispatch =>{
     console.log('addEspecie')
-    getFotoRef().add(especie).then(success=>{
+    getEspecieRef().add(especie).then(success=>{
         console.log(success)
         dispatch({type: ADD_ESPECIE,payload: especie})
     })
 }
 export const fetchEspecies =  () => async dispatch =>{
     console.log('fetchEspecies')
-    const especies = (await getEspecieRef().get()).docs.map((especies)=>especie.data())
+    const especies = (await getEspecieRef().get()).docs.map((especie)=>especie.data())
     console.log(`photos: ${especies}`)
     dispatch({type: GET_ESPECIES,payload: especies})
 }

@@ -1,7 +1,7 @@
 import firebase from '../../firebase';
 import {
-    ADD_COLABORADOR,
-    GET_COLABORADORES
+    ADD_ESTACION,
+    GET_ESTACIONES
 } from './estacionTypes'
 /*IDLocalidad: 'AW_AE01',
 Localidad: 'Comunidad Achuar de Wachirpas Amazonas Ecuatoriano',
@@ -35,13 +35,13 @@ const getEstacionRef = ()=> firebase.firestore().collection('estacion').withConv
 
 export const addEstacion = (estacion) => async dispatch =>{
     console.log('addEstacion')
-    estacionCollectionRef.add(estacion).then(success=>{
+    getEstacionRef.add(estacion).then(success=>{
         console.log(success)
-        dispatch({type: ADD_COLABORADOR,estacion})
+        dispatch({type: ADD_ESTACION,estacion})
     })
 }
 export const fetchEstaciones =  () => async dispatch =>{
     console.log('fetchEstaciones')
     const estaciones = (await getEstacionRef().get()).docs.map((estacion)=>estacion.data())
-    dispatch({type: GET_COLABORADORES,payload: estaciones})
+    dispatch({type: GET_ESTACIONES,payload: estaciones})
 }

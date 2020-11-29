@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { formatRoute } from 'react-router-named-routes';
+import firebase from '../firebase';
 import Resizer from 'react-image-file-resizer';
+import Swal from 'sweetalert2'
 
 import{
   DropdownEstaciones,
@@ -11,8 +13,9 @@ import{
 import NavBar from '../components/NavBar';
 
 import * as colaboradorActions from '../dataManager/colaborador/colaboradorActions';
-import firebase from '../firebase';
-import { Home_page } from '../utils/NamedRoutes';
+import * as fotosActions from '../dataManager/foto/fotoActions';
+
+import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
 
  class Home extends Component {
   constructor(props) {
@@ -20,25 +23,16 @@ import { Home_page } from '../utils/NamedRoutes';
     this.state = {
       estacion:'',
       camara: '',
-      fotos: []
+      fotos: [],
+      redirect: '',
+      imgCounter: 0,
+      notImageCounter: 0,
     }
     this.fileChangedHandler = this.fileChangedHandler.bind(this)
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-=======
-    this.props.fetchColaboradores()
-    this.props.addColaborador({nombre: 'mike was here'})
-  }
-
-  showFotos() {
-    return this.props.fotos.map(item => (
-      <tr>
-        <th className="sb-table-content"><span>{item.nombre}</span></th>
-      </tr>
-    ))
->>>>>>> 5a28ed16854e9301fbecf3080a562b95483d3b7a
+    this.props.fetchColaboradores();
   }
   
   async addFireData(){
@@ -112,10 +106,9 @@ import { Home_page } from '../utils/NamedRoutes';
 
 
   fileChangedHandler(event) {
-    console.log(event.target.files)
+    // console.log(event.target.files)
     const types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
     var files = false
-    var notImages = 0
     if(event.target.files) {
       files = true
     }
@@ -124,7 +117,6 @@ import { Home_page } from '../utils/NamedRoutes';
       Object.keys(event.target.files).forEach(index => {
         var file = event.target.files[index]
         if(!types.every(type => file.type !== type)) {
-          console.log(file)
           Resizer.imageFileResizer(
               file,
               800,
@@ -134,37 +126,87 @@ import { Home_page } from '../utils/NamedRoutes';
               0,
               uri => {
                 // console.log(uri)
-                file = {...file, uri}
+                console.log(file)
+                file = { 
+                  lastModified: file.lastModified,
+                  lastModifiedDate: file.lastModifiedDate,
+                  name: file.name,
+                  size: file.size,
+                  type: file.type, 
+                  uri,
+                }
                 console.log(file)
                 const newFotos = [...this.state.fotos, file] 
-                this.setState({fotos: newFotos})
+                const imgCounter = this.state.imgCounter+1
+                this.setState({fotos: newFotos, imgCounter})
+                this.props.setUploadedFotos(newFotos)
               },
               'base64'
           );
         } else {
-          notImages++
+          const notImageCounter = this.state.notImageCounter+1
+          this.setState({notImageCounter})
         }
       });
-      console.log(notImages + " archivos encontrados que nos son imagenes y no fueron cargados")
     }
   }
 
-  procesarImagenes() {
-    
+  procesarData = async () => {
+    let timerInterval
+    return Swal.fire({
+      title: 'Procesar imagenes',
+      text: `¡Deseas que las ${this.state.imgCounter} imagenes cargadas sean procesada? Esto puedes tomar varios minutos`,
+      icon: 'question',
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#D32B2B',
+      background: '#EDF0F2'
+    }).then(result => {
+      if(result.isConfirmed) {
+        Swal.fire({
+          title: 'Procesando imagenes',
+          // html: 'I will close in <b></b> milliseconds.',
+          timer: 2000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+          showCloseButton: false,
+          willOpen: () => {
+            Swal.showLoading()
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            this.setState({redirect: formatRoute(FOTOS_CARGADAS) })
+            console.log('I was closed by the timer')
+          }
+        })
+      }
+    })
+  }
+
+  Redirect() {
+    this.setState({redirect: ''})
+    return <Redirect push to={this.state.redirect}/>
   }
 
    render() {
     // this.addFireData()
-    this.getFireData().then((data)=>{
-      console.log(data.size)
+    //this.getFireData().then((data)=>{
+      //console.log(data.size)
       /*data.docs.forEach((value)=>{
         console.log(`value ${value}`)
       })*/
-    })
+    //})
+    
     
     return (
       <div className="main-cont">
             <NavBar />
+            { (this.state.redirect) ? this.Redirect() : '' }
             <div>
                 <div className="justify-content-center pt-5">
                     <div className="d-flex justify-content-center">
@@ -180,6 +222,12 @@ import { Home_page } from '../utils/NamedRoutes';
                                   <input id="file" directory="" webkitdirectory="" type="file" />
                               </button>
                             </div>
+                            {
+                              (this.state.imgCounter) ? <span>{this.state.imgCounter + ' imagenes cargadas'}</span> : ''
+                            }
+                            {
+                              (this.state.notImageCounter) ? <span>{this.state.imgCounter + ' archivos que no son imagenes descartaos'}</span> : ''
+                            }
                             <DropdownEstaciones
                                 name = "estacion"
                                 label = "Estación"
@@ -199,9 +247,9 @@ import { Home_page } from '../utils/NamedRoutes';
                             </div>
                             {
                               this.props.colaboradores.map((option, key) => (
-                                <div class="input-group my-3" key={key}>
-                                  <div class="input-group-prepend">
-                                    <div class="input-group-text">
+                                <div className="input-group my-3" key={key}>
+                                  <div className="input-group-prepend">
+                                    <div className="input-group-text">
                                       <input type="checkbox" aria-label="Checkbox for following text input"   />
                                     </div>
                                   </div>
@@ -214,9 +262,9 @@ import { Home_page } from '../utils/NamedRoutes';
                             </div>
                             {
                               this.props.colaboradores.map((option, key) => (
-                                <div class="input-group my-3" key={key}>
-                                  <div class="input-group-prepend">
-                                    <div class="input-group-text">
+                                <div className="input-group my-3" key={key}>
+                                  <div className="input-group-prepend">
+                                    <div className="input-group-text">
                                       <input type="checkbox" aria-label="Checkbox for following text input"   />
                                     </div>
                                   </div>
@@ -225,7 +273,12 @@ import { Home_page } from '../utils/NamedRoutes';
                               ))
                             }
                             <div className="d-flex justify-content-center">
-                                    <button className="btn-1" onClick={this.procesarImagenes}>Procesar imagenes</button>
+                              {
+                                (this.state.imgCounter)
+                                ? <button onClick={this.procesarData} className="btn-1">Procesar imagenes</button>
+                                : <button disabled className="btn-1">Procesar imagenes</button>
+                              }
+                                    
                             </div>
                         </div>
                     </div>
@@ -240,9 +293,9 @@ import { Home_page } from '../utils/NamedRoutes';
                             </div>
                             {
                               this.props.colaboradores.map((option, key) => (
-                                <div class="input-group my-3" key={key}>
-                                  <div class="input-group-prepend">
-                                    <div class="input-group-text">
+                                <div className="input-group my-3" key={key}>
+                                  <div className="input-group-prepend">
+                                    <div className="input-group-text">
                                       <input type="checkbox" aria-label="Checkbox for following text input"   />
                                     </div>
                                   </div>
@@ -262,6 +315,14 @@ import { Home_page } from '../utils/NamedRoutes';
    }
 }
 
-const mapStateToProps =({ camaraReducer, estacionReducer, colaboradorReducer }) => {return { ...camaraReducer, ...estacionReducer, ...colaboradorReducer }}
+const mapStateToProps =({ camaraReducer, estacionReducer, colaboradorReducer, fotoReducer}) => {return { ...camaraReducer, ...estacionReducer, ...colaboradorReducer, ...fotoReducer }}
 
-export default connect(mapStateToProps, colaboradorActions)(Home);
+const { fetchColaboradores } = colaboradorActions
+const { setUploadedFotos } = fotosActions
+
+const mapDispatchToProps = {
+  fetchColaboradores,
+  setUploadedFotos
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

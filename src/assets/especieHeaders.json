@@ -1,0 +1,38 @@
+[   
+    {
+        "id": "Reino",
+        "title" : "Reino"
+    },
+    {
+        "id": "Filo",
+        "title" : "Filo"
+    },
+    {
+        "id": "Clase",
+        "title" : "Clase"
+    },
+    {
+        "id": "Orden",
+        "title" : "Orden"
+    },
+    {
+        "id": "Familia",
+        "title" : "Familia"
+    },
+    {
+        "id": "Genero",
+        "title" : "Genero"
+    },
+    {
+        "id": "Especie",
+        "title" : "Especie"
+    },
+    {
+        "id": "NombreComunESP",
+        "title" : "Nombre comun en español"
+    },
+    {
+        "id": "NombreComunING",
+        "title" : "Nombre comun en ingles"
+    }
+]

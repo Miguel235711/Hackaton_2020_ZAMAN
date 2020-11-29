@@ -1,10 +1,12 @@
 import {
     GET_FOTOS,
-    ADD_FOTO
+    ADD_FOTO,
+    SET_UPLOADED_FOTOS
 } from './fotoTypes'
 
 const INITIAL_STATE = {
     fotos: [],
+    uploaded_fotos: []
 }
 
 const fotoReducer = (state = INITIAL_STATE, action) => {
@@ -18,6 +20,11 @@ const fotoReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 fotos: [...state.fotos,action.payload]
+            }
+        case SET_UPLOADED_FOTOS:
+            return{
+                ...state,
+                uploaded_fotos: action.payload
             }
         default: return state
     }

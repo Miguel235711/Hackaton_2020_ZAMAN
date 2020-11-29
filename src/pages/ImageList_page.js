@@ -1,34 +1,65 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { formatRoute } from 'react-router-named-routes';
 
 import NavBar from '../components/NavBar';
+import { EXPECIE_IMAGENES } from '../utils/NamedRoutes';
 
-export default class ImageList extends Component {
+class ImageList extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+        img: '',
+    }
+  }
+
+  getDate(d) {
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const date = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear()
+        const min = d.getMinutes()
+        const hrs = (d.getHours() > 12) ? d.getHours() % 12 : d.getHours()
+        const time = ((hrs < 10) ? '0'+ hrs : hrs ) + ':' + ((min < 10) ? '0'+ min : min ) + ((d.getHours() > 11) ? ' p.m.' : ' a.m.' )
+        return date + ' ' + time
+  }
 
   showList() {
-    return this.props.fotos.map((item, key) => (
-        <div className="card my-4" key={item.contenido_id}>
+    return this.props.uploaded_fotos.map((item, key) => {
+      if(key >= 3) { return(
+        <div className="card my-4" key={key}>
             <div className="list-card-body col-md-12">
-                <div className="sb-list-img col-md-3" data-toggle="modal" data-target="#Modal-img" onClick={()=> this.selectImage(content, contenido_id, puntos)}>
-                    <div style={{backgroundImage: 'url('+item.ima+')'}}></div>
-                    <div className="sb-opaque-layer"></div>
-                    <div className="d-flex justify-content-center align-items-center" ><span className="icon icon-view"/> </div>
+                <div className="list-img col-md-3" data-toggle="modal" data-target="#Modal-img" onClick={() => this.setState({img: item.uri})}>
+                  <img src={item.uri} alt='Selected logo'/>
                 </div>
                 <div className="list-card-content p-3 col-md-9">
-                    {(showOptions) 
-                        ? <div className="d-flex justify-content-end"><button onClick={ () =>this.options(item.titulo, key, item.contenido_id)} className="mini-icon icon-options"/></div>
-                        : ''
-                    }
-                    <div onClick={()=>this.description(item)} style={{cursor:'pointer'}}>
-                        <span className="d-block list-card-title"> { item.titulo } </span>
-                        { this.showDate( item.fechaPublicacion ) }
-                        <span className="list-card-des">{item.descripcion}</span>
-                        <div className="list-card-pts"> {item.puntos} Puntos</div>
+                    <div onClick={()=>{}} style={{cursor:'pointer'}}>
+                        <span className="d-block list-card-title"> { item.name } </span>
+                        <span className="d-block list-card-title"> { this.getDate(item.lastModifiedDate) } </span>
                     </div>
                 </div>
             </div>
         </div>
-    ))
+    )}})
+  }
+
+  showList2() {
+    return this.props.uploaded_fotos.map((item, key) => {
+      if(key < 3) { return(
+      <div className="card my-4" key={key}>
+          <div className="list-card-body col-md-12">
+              <div className="list-img col-md-3" data-toggle="modal" data-target="#Modal-img" onClick={() => this.setState({img: item.uri})}>
+                <img src={item.uri} alt='Selected logo'/>
+                <div className="opaque-layer"></div>
+              </div>
+              <div className="list-card-content p-3 col-md-9">
+                  <div onClick={()=>{}} style={{cursor:'pointer'}}>
+                      <span className="d-block list-card-title"> { item.name } </span>
+                      <span className="d-block list-card-title"> { this.getDate(item.lastModifiedDate) } </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+    )}})
   }
 
   render() {
@@ -43,9 +74,23 @@ export default class ImageList extends Component {
           </div>
           <div className="d-flex justify-content-center">
             <div className="list-card"> 
-              {(this.props.fotos ) ? this.showList() : '' }
+              <div className="d-flex justify-content-between">
+                <span>3 imagenes de puma</span>
+                <Link className="btn-1" to={formatRoute(EXPECIE_IMAGENES)}>Guardar</Link>
+              </div>
+              {(this.props.uploaded_fotos ) ? this.showList() : '' }
+              <div className="d-flex justify-content-between">
+                <span>3 imagenes inutiles</span>
+                <button className="btn-1">Descartar</button>
+              </div>
+              {(this.props.uploaded_fotos ) ? this.showList2() : '' }
             </div>
           </div>
+        </div>
+        <div className="modal fade" id="Modal-img" tabIndex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered justify-content-center" style={{maxWidth:'80%'}}>
+                <img src={this.state.img} alt="content" ></img>
+            </div>
         </div>
       </div>
     );
