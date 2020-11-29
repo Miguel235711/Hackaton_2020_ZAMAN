@@ -7,6 +7,7 @@ import App from './routes';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reduxthunk from 'redux-thunk';
+import {fetchColaboradores} from './dataManager/colaborador/colaboradorActions';
 
 import reducers from './dataManager';
 
@@ -15,7 +16,6 @@ const store = createStore(
   {},
   applyMiddleware(reduxthunk)
 );
-
 
 ReactDOM.render(
   <React.StrictMode>
