@@ -1,0 +1,1 @@
+export const GET_COLABORADORES = 'colaborador_get_colaboradores';
