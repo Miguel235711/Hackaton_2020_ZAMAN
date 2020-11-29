@@ -1,5 +1,6 @@
 import {
-    GET_CAMARAS
+    GET_CAMARAS,
+    ADD_CAMARA
 } from './camaraTypes';
 
 const INITIAL_STATE = {
@@ -51,9 +52,15 @@ const INITIAL_STATE = {
 const camaraReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case GET_CAMARAS:
+            console.log(`GET_CAMARAS payload ${action.payload}`)
             return {
                 ...state,
-                camara: action.payload
+                camaras: action.payload
+            }
+        case ADD_CAMARA:
+            return {
+                ...state,
+                camaras: [...state.camaras,action.payload]
             }
         default: return state
     }

@@ -1,5 +1,6 @@
 import {
     GET_COLABORADORES,
+    ADD_COLABORADOR
 } from './colaboradorTypes';
 
 //import {createAsyncThunk } from '@reduxjs/toolkit'
@@ -21,6 +22,11 @@ const colaboradoresReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 colaboradores: action.payload
+            }
+        case ADD_COLABORADOR:
+            return {
+                ...state,
+                colaboradores: [...state.colaboradores,action.payload]
             }
         default: return state
     }

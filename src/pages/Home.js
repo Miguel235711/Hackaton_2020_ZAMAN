@@ -9,7 +9,7 @@ import{
 } from '../components/input';
 import NavBar from '../components/NavBar';
 
-import * as fotoActions from '../dataManager/foto/fotoActions';
+import * as colaboradorActions from '../dataManager/colaborador/colaboradorActions';
 import firebase from '../firebase';
 
  class Home extends Component {
@@ -22,7 +22,8 @@ import firebase from '../firebase';
   }
 
   componentDidMount() {
-    this.props.getFotos();
+    this.props.fetchColaboradores()
+    this.props.addColaborador({nombre: 'mike was here'})
   }
 
   showFotos() {
@@ -217,4 +218,4 @@ import firebase from '../firebase';
 
 const mapStateToProps =({ camaraReducer, estacionReducer, colaboradorReducer }) => {return { ...camaraReducer, ...estacionReducer, ...colaboradorReducer }}
 
-export default connect(mapStateToProps, fotoActions)(Home);
+export default connect(mapStateToProps, colaboradorActions)(Home);

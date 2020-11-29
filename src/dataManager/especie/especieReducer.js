@@ -1,5 +1,6 @@
 import {
-    GET_ESPECIES
+    GET_ESPECIES,
+    ADD_ESPECIE
 } from './especieTypes';
 
 const INITIAL_STATE = {
@@ -12,6 +13,10 @@ const especieReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 especies: action.payload
+            }
+        case ADD_ESPECIE: 
+            return{
+                especies: [state.especies,action.payload]
             }
         default: return state
     }
