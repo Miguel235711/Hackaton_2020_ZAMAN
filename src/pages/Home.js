@@ -10,7 +10,7 @@ import{
 } from '../components/input';
 import NavBar from '../components/NavBar';
 
-import * as fotoActions from '../dataManager/foto/fotoActions';
+import * as colaboradorActions from '../dataManager/colaborador/colaboradorActions';
 import firebase from '../firebase';
 import { Home_page } from '../utils/NamedRoutes';
 
@@ -26,6 +26,19 @@ import { Home_page } from '../utils/NamedRoutes';
   }
 
   componentDidMount() {
+<<<<<<< HEAD
+=======
+    this.props.fetchColaboradores()
+    this.props.addColaborador({nombre: 'mike was here'})
+  }
+
+  showFotos() {
+    return this.props.fotos.map(item => (
+      <tr>
+        <th className="sb-table-content"><span>{item.nombre}</span></th>
+      </tr>
+    ))
+>>>>>>> 5a28ed16854e9301fbecf3080a562b95483d3b7a
   }
   
   async addFireData(){
@@ -251,4 +264,4 @@ import { Home_page } from '../utils/NamedRoutes';
 
 const mapStateToProps =({ camaraReducer, estacionReducer, colaboradorReducer }) => {return { ...camaraReducer, ...estacionReducer, ...colaboradorReducer }}
 
-export default connect(mapStateToProps, fotoActions)(Home);
+export default connect(mapStateToProps, colaboradorActions)(Home);

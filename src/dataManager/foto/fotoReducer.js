@@ -1,5 +1,6 @@
 import {
-    GET_FOTOS
+    GET_FOTOS,
+    ADD_FOTO
 } from './fotoTypes'
 
 const INITIAL_STATE = {
@@ -12,6 +13,11 @@ const fotoReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 fotos: action.payload
+            }
+        case ADD_FOTO:
+            return {
+                ...state,
+                fotos: [...state.fotos,action.payload]
             }
         default: return state
     }

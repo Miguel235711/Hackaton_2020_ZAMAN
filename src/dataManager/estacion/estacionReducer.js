@@ -1,5 +1,6 @@
 import {
-    GET_ESTACIONES
+    GET_ESTACIONES,
+    ADD_ESTACION
 } from './estacionTypes';
 
 const INITIAL_STATE = {
@@ -27,12 +28,19 @@ const INITIAL_STATE = {
     ],
 }
 
+
+
 const estacionReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case GET_ESTACIONES:
             return {
                 ...state,
                 estaciones: action.payload
+            }
+        case ADD_ESTACION:
+            return{
+                ...state,
+                estaciones: [...state.estaciones,action.payload]
             }
         default: return state
     }

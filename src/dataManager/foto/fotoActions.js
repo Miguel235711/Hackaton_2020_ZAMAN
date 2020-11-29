@@ -1,18 +1,35 @@
-import { GET_FOTOS } from './fotoTypes';
 import firebase from '../../firebase';
+import {
+    GET_FOTOS,
+    ADD_FOTO
+} from './fotoTypes';
 
-export const getFotos = () => async dispatch => {
 
-    // aqui va el get
-    /*const response = await axios.post( baseUrl+url, data, {withCredentials: true})
-    .catch(error => {
-        console.log(error)
+const fotosConverter = {
+    fromFirestore(snapshot, options){
+        const data = snapshot.data(options)
+        return { 
+            id: snapshot.id,
+            ...data
+        }
+    },
+    toFirestore(foto){
+        return foto
+    }
+}
+
+const getFotoRef = ()=> firebase.firestore().collection('foto').withConverter(fotosConverter)
+
+export const addFoto = (foto) => async dispatch =>{
+    console.log('addFoto')
+    getFotoRef().add(foto).then(success=>{
+        console.log(success)
+        dispatch({type: ADD_FOTO,payload: foto})
     })
-
-    const fotos = await response.data
-    dispatch({
-        type: GET_FOTOS,
-        payload: fotos
-    })*/
-    return (await firebase.firestore().collection('react').get()).docs
+}
+export const fetchFotos =  () => async dispatch =>{
+    console.log('fetchFotos')
+    const photos = (await getFotoRef().get()).docs.map((foto)=>foto.data())
+    console.log(`photos: ${photos}`)
+    dispatch({type: GET_FOTOS,payload: photos})
 }
