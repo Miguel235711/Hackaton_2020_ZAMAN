@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { formatRoute } from 'react-router-named-routes';
+import Resizer from 'react-image-file-resizer';
 
 import{
-  MailInput,
-  AutosuggestInput,
   DropdownEstaciones,
   DropdownCamaras
 } from '../components/input';
@@ -11,26 +12,20 @@ import NavBar from '../components/NavBar';
 
 import * as fotoActions from '../dataManager/foto/fotoActions';
 import firebase from '../firebase';
+import { Home_page } from '../utils/NamedRoutes';
 
  class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
       estacion:'',
-      camara: ''
+      camara: '',
+      fotos: []
     }
+    this.fileChangedHandler = this.fileChangedHandler.bind(this)
   }
 
   componentDidMount() {
-    this.props.getFotos();
-  }
-
-  showFotos() {
-    return this.props.fotos.map(item => (
-      <tr>
-        <th className="sb-table-content"><span>{item.nombre}</span></th>
-      </tr>
-    ))
   }
   
   async addFireData(){
@@ -105,7 +100,46 @@ import firebase from '../firebase';
 
   fileChangedHandler(event) {
     console.log(event.target.files)
+    const types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+    var files = false
+    var notImages = 0
+    if(event.target.files) {
+      files = true
+    }
+    this.setState({fotos: []})
+    if(files) {
+      Object.keys(event.target.files).forEach(index => {
+        var file = event.target.files[index]
+        if(!types.every(type => file.type !== type)) {
+          console.log(file)
+          Resizer.imageFileResizer(
+              file,
+              800,
+              800,
+              file.type,
+              70,
+              0,
+              uri => {
+                // console.log(uri)
+                file = {...file, uri}
+                console.log(file)
+                const newFotos = [...this.state.fotos, file] 
+                this.setState({fotos: newFotos})
+              },
+              'base64'
+          );
+        } else {
+          notImages++
+        }
+      });
+      console.log(notImages + " archivos encontrados que nos son imagenes y no fueron cargados")
+    }
   }
+
+  procesarImagenes() {
+    
+  }
+
    render() {
     // this.addFireData()
     this.getFireData().then((data)=>{
@@ -114,22 +148,25 @@ import firebase from '../firebase';
         console.log(`value ${value}`)
       })*/
     })
+    
     return (
       <div className="main-cont">
             <NavBar />
             <div>
-
-
                 <div className="justify-content-center pt-5">
                     <div className="d-flex justify-content-center">
                         <h3><b>Cargar Imagenes</b></h3>
                     </div>
                 </div>
-
-
                 <div className="d-flex justify-content-center form">
                     <div className="card-form card">
                         <div className="column">
+                            <div className="d-flex justify-content-center">
+                              <button className="btn-file" onChange={this.fileChangedHandler}> 
+                                  <label htmlFor="file">Cargar imagenes</label>
+                                  <input id="file" directory="" webkitdirectory="" type="file" />
+                              </button>
+                            </div>
                             <DropdownEstaciones
                                 name = "estacion"
                                 label = "Estación"
@@ -175,10 +212,7 @@ import firebase from '../firebase';
                               ))
                             }
                             <div className="d-flex justify-content-center">
-                                <button className="btn-file" onChange={this.fileChangedHandler}> 
-                                    <label htmlFor="file">Cargar imagenes</label>
-                                    <input id="file" directory="" webkitdirectory="" type="file" />
-                                </button>
+                                    <button className="btn-1" onClick={this.procesarImagenes}>Procesar imagenes</button>
                             </div>
                         </div>
                     </div>
