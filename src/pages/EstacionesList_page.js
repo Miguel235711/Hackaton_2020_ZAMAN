@@ -7,6 +7,9 @@ import Table from '../components/Table';
 import * as estacionActions from '../dataManager/estacion/estacionActions';
 
 import estacionHeaders from '../assets/estacionHeaders.json';
+import { Link } from 'react-router-dom';
+import { formatRoute } from 'react-router-named-routes';
+import { ESTACION_CREATE } from '../utils/NamedRoutes';
 
 class EstacionesList extends Component {
     constructor(props){
@@ -28,6 +31,11 @@ class EstacionesList extends Component {
                 <div className="d-flex justify-content-center">
                     <h3><b>Estaciones</b></h3>
                 </div>
+            </div>
+            <div className="d-flex justify-content-center py-5">
+                <Link to={ formatRoute(ESTACION_CREATE) } className="btn-1">
+                    + Registrar nueva estación
+                </Link>
             </div>
             {
                 (this.props.estaciones)

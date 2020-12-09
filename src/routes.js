@@ -13,9 +13,10 @@ import {
   FOTOS_CARGADAS,
   ESTACIONES,
   ESPECIES,
-  EXPECIE_IMAGENES
+  EXPECIE_IMAGENES,
+  ESTACION_CREATE
 } from './utils/NamedRoutes';
-import EspecieImageList_page from './pages/EspecieImageList_page';
+import EstacionForm from './pages/EstacionForm_page';
 
 const history = createBrowserHistory();
 
@@ -29,6 +30,7 @@ const history = createBrowserHistory();
            <Route exact path={ESTACIONES} render={() => <EstacionesList />} />
            <Route exact path={ESPECIES} render={() => <EspeciesList />} />
            <Route exact path={EXPECIE_IMAGENES} render={() => <EspecieImageList />} />
+           <Route exact path={ESTACION_CREATE} render={ () => <EstacionForm />} />
          </Switch>
        </div>
      </Router>
