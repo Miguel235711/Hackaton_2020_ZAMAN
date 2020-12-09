@@ -2,7 +2,13 @@ import React, { useState, Component} from "react";
 import Autosuggest from 'react-autosuggest';
 
 import { 
-    ShortTextInput_Validation
+    ShortTextInput_Validation,
+    MinTextInput_Validation,
+    TextInput_Validation,
+    LongTextInput_Validation,
+    MaxTextInput_Validation,
+    PasswordInput_Validation,
+    NumberInput_Validation
 } from './Validator';
 
 export function MailInput(props) {
@@ -28,6 +34,273 @@ export function MailInput(props) {
                         }
                         else {
                             setValidationMessage('Dirección de correo invalida')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        props.onChange( event.target, true)
+                    }
+                        
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function PasswordInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <input 
+                type="password" 
+                name = { props.name }
+                required
+                placeholder= { props.label }
+                value={props.value} 
+                onKeyPress={ (props.onKeyPress) ? props.onKeyPress : null }
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = PasswordInput_Validation(event.target.value)
+                        if (valid === 0) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else if(valid === 1) {
+                            setValidationMessage('Tu contraseña debe tener almenos 6 caracteres')
+                            props.onChange( event.target, false)
+                        }
+                        else {
+                            setValidationMessage('Tu contraseña puede tener letras numeros o algunos de los siguientes caracteres: !@#$%^&* ')
+                            props.onChange( event.target.value, false)
+                        }
+                    } else 
+                        props.onChange( event.target, true)
+                }}
+                 />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function NumberInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <input 
+                type="number"
+                name = { props.name }
+                required
+                placeholder = { props.label }
+                value = {props.value} 
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = NumberInput_Validation(event.target.value)
+                        if (valid === 0) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else if(valid === 1) {
+                            setValidationMessage('Campo Invalido')
+                            props.onChange( event.target, false)
+                        }
+                        else {
+                            setValidationMessage('Solo se aceptan valores numericos')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        props.onChange( event.target, event.target, true)
+                    }   
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function MinTextInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <input 
+                type="text"
+                name = { props.name }
+                required
+                placeholder={ props.label }
+                value={props.value} 
+                onKeyPress={ (props.onKeyPress) ? props.onKeyPress : null }
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = MinTextInput_Validation(event.target.value)
+                        if (valid === true) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido, fuera de los limites (1 45 caracteres)')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        if(event.target.value.length <= 45){
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido')
+                            props.onChange( event.target, false)
+                        }
+                    }
+                        
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function ShortTextInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <input 
+                type="text" 
+                name = { props.name }
+                required
+                placeholder={ props.label }
+                value={props.value} 
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = ShortTextInput_Validation(event.target.value)
+                        if (valid === true) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido, fuera de los limites (1 100 caracteres)')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        props.onChange( event.target, true)
+                    }
+                        
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function TextInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { (props.showLabel !== false) ? props.label: '' }
+            </label>
+            <textarea 
+                type="text" 
+                name = { props.name }
+                required
+                placeholder={ props.label }
+                value={props.value} 
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = TextInput_Validation(event.target.value)
+                        if (valid) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido, fuera de los limites (1 a 255 caracteres)')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        props.onChange( event.target, true)
+                    }
+                        
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function LongTextInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <textarea 
+                type="text"
+                name = { props.name }
+                required
+                placeholder={(props.placeholder) ? props.placeholder:  props.label }
+                value={props.value} 
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = LongTextInput_Validation(event.target.value)
+                        if (valid === true) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido, fuera de los limites (1 1000 caracteres)')
+                            props.onChange( event.target, false)
+                        }
+                    } else {
+                        props.onChange( event.target, true)
+                    }
+                        
+                }} />
+            <div className="d-flex justify-content-end">
+                <small className="form-text text-danger font-italic">{validationMessage}</small>
+            </div>
+        </div>
+    );
+}
+
+export function MaxTextInput(props) {
+    const [validationMessage, setValidationMessage] = useState('');
+    return (
+        <div className="input-body">
+            <label>
+                { props.label }
+            </label>
+            <input 
+                type="text" 
+                name = { props.name }
+                required
+                placeholder={ props.label }
+                value={props.value} 
+                onChange={ (event) => {
+                    if(props.validate) {
+                        const valid = MaxTextInput_Validation(event.target.value)
+                        if (valid === true) {
+                            setValidationMessage('')
+                            props.onChange( event.target, true)
+                        }
+                        else {
+                            setValidationMessage('Campo invalido, fuera de los limites (1 65000 caracteres)')
                             props.onChange( event.target, false)
                         }
                     } else {
@@ -133,7 +406,7 @@ export class AutosuggestInput extends Component {
             onChange: this.onChange
           };
         return(
-            <div className="sb-input-body">
+            <div className="input-body">
                 <label>
                     {this.props.label}
                 </label>
