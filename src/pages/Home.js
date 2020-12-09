@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as ml5 from 'ml5';
 
 import{
   MailInput,
@@ -21,9 +22,30 @@ import firebase from '../firebase';
     }
   }
 
+  async loadML(){
+    try{
+      const classifier = ml5.imageClassifier('model/model.json',()=>{
+        console.log('Model loaded!')
+      })
+      const image = document.getElementById('demo_image')
+      classifier.predict(image,1,(err,results)=>{
+        // print the result in the console
+        console.log(results)
+      })
+      /*const predictions = await model.classify(image);
+      console.log(predictions);
+      console.log('model loaded!!!')*/
+    }catch(e){
+      console.log(`error in loadML() ${e}`)
+    }
+  
+  }
+
   componentDidMount() {
+    console.log('componentDidMount')
     this.props.fetchColaboradores()
     this.props.addColaborador({nombre: 'mike was here'})
+    this.loadML()
   }
 
   showFotos() {
@@ -118,6 +140,7 @@ import firebase from '../firebase';
     return (
       <div className="main-cont">
             <NavBar />
+            <img id="demo_image" crossorigin="anonymous" src="DSCF0038.jpg"/>
             <div>
 
 
