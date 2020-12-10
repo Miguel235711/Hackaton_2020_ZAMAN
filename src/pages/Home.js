@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ml5 from 'ml5';
+import * as model from './MLModel/model.json';
 
 import{
   MailInput,
@@ -24,7 +25,7 @@ import firebase from '../firebase';
 
   async loadML(){
     try{
-      const classifier = ml5.imageClassifier('model/model.json',()=>{
+      const classifier = ml5.imageClassifier('./mlmodel/model.json',()=>{
         console.log('Model loaded!')
       })
       const image = document.getElementById('demo_image')
