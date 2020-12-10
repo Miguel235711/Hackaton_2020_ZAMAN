@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { formatRoute } from 'react-router-named-routes';
 import firebase from '../firebase';
 import Resizer from 'react-image-file-resizer';
 import Swal from 'sweetalert2'
 import * as ml5 from 'ml5';
-import * as model from './MLModel/model.json';
 
 import{
   DropdownEstaciones,
@@ -29,34 +28,62 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
       redirect: '',
       imgCounter: 0,
       notImageCounter: 0,
+      predictions: {
+        "Oso": [],
+        "Jaguar": [],
+        "Puma": [],
+        "Zorra Gris": [],
+        "Coyote": [],
+        "Nada": []
+      },
+      errors: 0
     }
     this.fileChangedHandler = this.fileChangedHandler.bind(this)
   }
 
   async loadML(){
+    var errors = 0
     try{
-      const classifier = ml5.imageClassifier('./mlmodel/model.json',()=>{
-        console.log('Model loaded!')
-      })
-      const image = document.getElementById('demo_image')
-      classifier.predict(image,1,(err,results)=>{
-        // print the result in the console
-        console.log(results)
-      })
+      const classifier = await ml5.imageClassifier('./mlmodel/model.json')
+      console.log(classifier)
+      this.props.uploaded_fotos.forEach( async foto => {
+        console.log('foreach')
+        try{
+          const image = document.getElementById(foto.name)
+          const results = await classifier.predict(image,1)
+          const { predictions } = this.state
+          const prediction = results[0]
+          if(prediction.confidence > 0.5){
+            const animalPrediction = {...predictions[prediction.label], image}
+            const newPredictions = {...predictions, [prediction.label]: animalPrediction}
+            this.setState({predictions: newPredictions})
+          }
+          console.log(results)
+        }catch (err) {
+          console.log(err)
+          errors++
+        }
+        
+      });
+      console.log('Hola')
+      this.setState({errors})
+      return true
+      // const image = document.getElementById('demo_image')
       /*const predictions = await model.classify(image);
       console.log(predictions);
       console.log('model loaded!!!')*/
     }catch(e){
       console.log(`error in loadML() ${e}`)
+      throw new Error('Sucedió un error clasificando las imagenes')
     }
-  
+
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
+    //console.log('componentDidMount')
     this.props.fetchColaboradores()
-    this.props.addColaborador({nombre: 'mike was here'})
-    this.loadML()
+    // this.props.addColaborador({nombre: 'mike was here'})
+    // this.loadML()
   }
 
   showFotos() {
@@ -158,8 +185,8 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
               0,
               uri => {
                 // console.log(uri)
-                console.log(file)
-                file = { 
+                // console.log(file)
+                const newFile = { 
                   lastModified: file.lastModified,
                   lastModifiedDate: file.lastModifiedDate,
                   name: file.name,
@@ -167,11 +194,11 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
                   type: file.type, 
                   uri,
                 }
-                console.log(file)
                 const newFotos = [...this.state.fotos, file] 
+                const newUploadedFotos = [...this.props.uploaded_fotos, newFile]
                 const imgCounter = this.state.imgCounter+1
                 this.setState({fotos: newFotos, imgCounter})
-                this.props.setUploadedFotos(newFotos)
+                this.props.setUploadedFotos(newUploadedFotos)
               },
               'base64'
           );
@@ -184,10 +211,9 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
   }
 
   procesarData = async () => {
-    let timerInterval
     return Swal.fire({
       title: 'Procesar imagenes',
-      text: `¡Deseas que las ${this.state.imgCounter} imagenes cargadas sean procesada? Esto puedes tomar varios minutos`,
+      text: `¡Deseas que las ${this.state.imgCounter} imagenes cargadas sean procesadas? Esto puedes tomar varios minutos`,
       icon: 'question',
       showCancelButton: true,
       showCloseButton: true,
@@ -195,27 +221,20 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
       cancelButtonText: 'Cancelar',
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#D32B2B',
-      background: '#EDF0F2'
+      background: '#EDF0F2',
+      preConfirm: async () => {
+        return this.loadML().catch( error => {
+            console.log(error)
+            Swal.showValidationMessage(
+                `${'Ocurrio un error' + ((error[0]) ? (': '+ error[0].message) : '' )}`
+            )
+
+        })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
     }).then(result => {
       if(result.isConfirmed) {
-        Swal.fire({
-          title: 'Procesando imagenes',
-          // html: 'I will close in <b></b> milliseconds.',
-          timer: 2000,
-          timerProgressBar: true,
-          showCancelButton: false,
-          showConfirmButton: false,
-          showCloseButton: false,
-          willOpen: () => {
-            Swal.showLoading()
-          },
-        }).then((result) => {
-          /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-            this.setState({redirect: formatRoute(FOTOS_CARGADAS) })
-            console.log('I was closed by the timer')
-          }
-        })
+        this.setState({redirect: formatRoute(FOTOS_CARGADAS) })
       }
     })
   }
@@ -232,14 +251,16 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
       /*data.docs.forEach((value)=>{
         console.log(`value ${value}`)
       })*/
-    //})
+    //})<img id="demo_image" crossOrigin="anonymous" src="DSCF0038.jpg" alt="Ejemplo animal"/>
     
     
     return (
       <div className="main-cont">
             <NavBar />
             { (this.state.redirect) ? this.Redirect() : '' }
-            <img id="demo_image" crossorigin="anonymous" src="DSCF0038.jpg"/>
+            { this.props.uploaded_fotos.map(foto => {
+              return(<img id={foto.name} crossOrigin="anonymous" src={foto.uri} alt={foto.name} hidden />)
+            }) }
             <div>
                 <div className="justify-content-center pt-5">
                     <div className="d-flex justify-content-center">

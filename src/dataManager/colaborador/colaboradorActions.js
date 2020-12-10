@@ -28,8 +28,8 @@ export const addColaborador = (colaborador) => async dispatch =>{
     })
 }
 export const fetchColaboradores =  () => async dispatch =>{
-    console.log('fetchColaboradores')
+    // console.log('fetchColaboradores')
     const people = (await getColaboradorRef().get()).docs.map((person)=>person.data())
-    console.log(`people: ${people}`)
+    // console.log(`people: ${people}`)
     dispatch({type: GET_COLABORADORES,payload: people})
 }

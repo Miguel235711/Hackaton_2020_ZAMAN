@@ -18,7 +18,6 @@ const INITIAL_STATE = {
 const colaboradoresReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case GET_COLABORADORES:
-            console.log('GET_COLABORADORES')
             return {
                 ...state,
                 colaboradores: action.payload
