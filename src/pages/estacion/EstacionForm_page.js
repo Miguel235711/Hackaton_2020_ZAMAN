@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import NavBar from '../components/NavBar';
+import NavBar from '../../components/NavBar';
 
-import { ShortTextInput } from '../components/input'
+import { ShortTextInput } from '../../components/input'
 
 export default class EstacionForm extends Component {
     constructor(props) {

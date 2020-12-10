@@ -12,10 +12,8 @@ const INITIAL_STATE = {
             FechaColocacion: '17/05/18',
             FechaRemocion:  '',
             Notas2: 'Notas ejemplo',
-            GeoPunto: {
                 Latitud:  -2.56288407347755,
-                Longitud: -76.8923471347454
-            },
+                Longitud: -76.8923471347454,
             Datum: 'WGS84',
             Altitud: 242,
             Vegetacion: 'Bosque Lluvioso de Tierras Bajas',
@@ -32,10 +30,8 @@ const INITIAL_STATE = {
             FechaColocacion: '17/05/18',
             FechaRemocion:  '',
             Notas2: 'Notas ejemplo',
-            GeoPunto: {
                 Latitud:  -2.58327644837327,
-                Longitud: -76.8042640918858
-            },
+                Longitud: -76.8042640918858,
             Datum: 'WGS84',
             Altitud: 260,
             Vegetacion: 'Bosque Lluvioso de Tierras Bajas',

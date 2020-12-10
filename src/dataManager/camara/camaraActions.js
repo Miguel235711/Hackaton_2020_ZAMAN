@@ -58,7 +58,7 @@ export const fetchCamaras =  () => async dispatch =>{
 }
 export const addCamara = (camara) => async dispatch =>{
     console.log('addCamara')
-    camaraCollectionRef.add(camara).then(success=>{
+    getCamaraRef.add(camara).then(success=>{
         console.log(success)
         dispatch({type: ADD_CAMARA,camara})
     })

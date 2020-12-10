@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import NavBar from '../components/NavBar';
-import Spinner from '../components/spinner';
-import Table from '../components/Table';
+import NavBar from '../../components/NavBar';
+import Spinner from '../../components/spinner';
+import Table from '../../components/Table';
 
-import * as estacionActions from '../dataManager/estacion/estacionActions';
+import * as estacionActions from '../../dataManager/estacion/estacionActions';
 
-import estacionHeaders from '../assets/estacionHeaders.json';
+import estacionHeaders from '../../assets/estacionHeaders.json';
 import { Link } from 'react-router-dom';
 import { formatRoute } from 'react-router-named-routes';
-import { ESTACION_CREATE } from '../utils/NamedRoutes';
+import { ESTACION_CREATE } from '../../utils/NamedRoutes';
 
 class EstacionesList extends Component {
     constructor(props){

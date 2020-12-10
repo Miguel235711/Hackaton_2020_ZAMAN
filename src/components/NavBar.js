@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { formatRoute } from 'react-router-named-routes';
 
-import { ESPECIES, ESTACIONES, HOME_PAGE } from '../utils/NamedRoutes';
+import { CAMARAS, ESPECIES, ESTACIONES, HOME_PAGE } from '../utils/NamedRoutes';
 
 class NavBar extends Component {
 
@@ -13,7 +13,7 @@ class NavBar extends Component {
                     <span className="d-flex justify-content-center">Estaciones</span>
                 </div>
             </Link>
-            <Link to={formatRoute(HOME_PAGE)} className="navbar-brand">
+            <Link to={formatRoute(CAMARAS)} className="navbar-brand">
                 <div className="nav-element">
                     <span className="d-flex justify-content-center">Camaras</span>
                 </div>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import NavBar from '../components/NavBar';
-import Spinner from '../components/spinner';
-import Table from '../components/Table';
+import NavBar from '../../components/NavBar';
+import Spinner from '../../components/spinner';
+import Table from '../../components/Table';
 
-import * as especieActions from '../dataManager/especie/especieActions';
+import * as especieActions from '../../dataManager/especie/especieActions';
 
-import especieHeaders from '../assets/especieHeaders.json';
+import especieHeaders from '../../assets/especieHeaders.json';
 
 class EspecieList extends Component {
     constructor(props){

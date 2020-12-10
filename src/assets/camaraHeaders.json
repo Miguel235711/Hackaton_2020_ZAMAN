@@ -1,0 +1,50 @@
+[
+    {
+        "id": "Marca",
+        "title": "Marca"
+    },
+    {
+        "id": "Modelo",
+        "title": "Modelo"
+    },
+    {
+        "id": "OrientacionGeografica",
+        "title": "OrientacionGeografica"
+    },
+    {
+        "id": "FechaColocacion",
+        "title": "FechaColocacion"
+    },
+    {
+        "id": "FechaRemocion",
+        "title": "FechaRemocion"
+    },
+    {
+        "id": "Notas2",
+        "title": "Notas2"
+    },
+    {
+        "id": "Latitud",
+        "title": "Latitud"
+    },
+    {
+        "id": "Longitud",
+        "title": "Longitud"
+    },
+    {
+        "id": "Datum",
+        "title": "Datum"
+    },
+    {
+        "id": "Altitud",
+        "title": "Altitud"
+    },
+    {
+        "id": "Vegetacion",
+        "title": "Vegetacion"
+    },
+    {
+        "id": "Clima",
+        "title": "Clima"
+    }
+]

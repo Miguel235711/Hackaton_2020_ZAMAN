@@ -344,7 +344,7 @@ export function DropdownCamaras(props) {
             >
                 <option value={props.name}>{props.label}</option>
                 { (props.options) ? props.options.map((option, key) => (
-                    <option key={key} value={key}>{option.Marca + ' ' + option.Modelo + ' en ' + option.GeoPunto.Latitud + option.GeoPunto.Longitud}</option>
+                    <option key={key} value={key}>{option.Marca + ' ' + option.Modelo + ' en ' + option.Latitud + option.Longitud}</option>
                 )): ''}
             </select>
         </div>

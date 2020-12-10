@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import NavBar from '../components/NavBar';
+import NavBar from '../../components/NavBar';
 
 class EspecieImageList extends Component {
   constructor(props){
