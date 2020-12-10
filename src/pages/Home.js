@@ -44,21 +44,32 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
   async loadML(){
     var errors = 0
     try{
-      const classifier = await ml5.imageClassifier('./mlmodel/model.json')
-      console.log(classifier)
+      const animalClassifier = await ml5.imageClassifier('./Animal/model.json')
+      const especieClassifier = await ml5.imageClassifier('./Especies/model.json')
       this.props.uploaded_fotos.forEach( async foto => {
-        console.log('foreach')
         try{
           const image = document.getElementById(foto.name)
-          const results = await classifier.predict(image,1)
-          const { predictions } = this.state
-          const prediction = results[0]
-          if(prediction.confidence > 0.5){
-            const animalPrediction = {...predictions[prediction.label], image}
-            const newPredictions = {...predictions, [prediction.label]: animalPrediction}
+          const isAnimal = await animalClassifier.predict(image,1)
+          
+          if(isAnimal[0].label === 'Animal') {
+            const results = await especieClassifier.predict(image,1)
+            console.log(results)
+            const prediction = results[0]
+            if(prediction.confidence > 0.5){
+              const { predictions } = this.state
+              console.log(prediction)
+              console.log(predictions)
+              const animalPrediction = [...predictions[prediction.label], foto]
+              const newPredictions = {...predictions, [prediction.label]: animalPrediction}
+              console.log(newPredictions)
+              this.setState({predictions: newPredictions})
+            }
+          } else {
+            const { predictions } = this.state
+            const animalPrediction = [...predictions['Nada'], foto]
+            const newPredictions = {...predictions, 'Nada': animalPrediction}
             this.setState({predictions: newPredictions})
           }
-          console.log(results)
         }catch (err) {
           console.log(err)
           errors++
