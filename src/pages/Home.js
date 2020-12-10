@@ -5,6 +5,8 @@ import { formatRoute } from 'react-router-named-routes';
 import firebase from '../firebase';
 import Resizer from 'react-image-file-resizer';
 import Swal from 'sweetalert2'
+import * as ml5 from 'ml5';
+import * as model from './MLModel/model.json';
 
 import{
   DropdownEstaciones,
@@ -31,8 +33,38 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
     this.fileChangedHandler = this.fileChangedHandler.bind(this)
   }
 
+  async loadML(){
+    try{
+      const classifier = ml5.imageClassifier('./mlmodel/model.json',()=>{
+        console.log('Model loaded!')
+      })
+      const image = document.getElementById('demo_image')
+      classifier.predict(image,1,(err,results)=>{
+        // print the result in the console
+        console.log(results)
+      })
+      /*const predictions = await model.classify(image);
+      console.log(predictions);
+      console.log('model loaded!!!')*/
+    }catch(e){
+      console.log(`error in loadML() ${e}`)
+    }
+  
+  }
+
   componentDidMount() {
-    this.props.fetchColaboradores();
+    console.log('componentDidMount')
+    this.props.fetchColaboradores()
+    this.props.addColaborador({nombre: 'mike was here'})
+    this.loadML()
+  }
+
+  showFotos() {
+    return this.props.fotos.map(item => (
+      <tr>
+        <th className="sb-table-content"><span>{item.nombre}</span></th>
+      </tr>
+    ))
   }
   
   async addFireData(){
@@ -207,6 +239,7 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
       <div className="main-cont">
             <NavBar />
             { (this.state.redirect) ? this.Redirect() : '' }
+            <img id="demo_image" crossorigin="anonymous" src="DSCF0038.jpg"/>
             <div>
                 <div className="justify-content-center pt-5">
                     <div className="d-flex justify-content-center">
