@@ -58,17 +58,18 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
             if(prediction.confidence > 0.5){
               const { predictions } = this.state
               console.log(prediction)
-              console.log(predictions)
               const animalPrediction = [...predictions[prediction.label], foto]
               const newPredictions = {...predictions, [prediction.label]: animalPrediction}
               console.log(newPredictions)
               this.setState({predictions: newPredictions})
+              this.props.setPredictions(newPredictions)
             }
           } else {
             const { predictions } = this.state
             const animalPrediction = [...predictions['Nada'], foto]
             const newPredictions = {...predictions, 'Nada': animalPrediction}
             this.setState({predictions: newPredictions})
+            this.props.setPredictions(newPredictions)
           }
         }catch (err) {
           console.log(err)
@@ -76,7 +77,6 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
         }
         
       });
-      console.log('Hola')
       this.setState({errors})
       return true
       // const image = document.getElementById('demo_image')
@@ -244,8 +244,13 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
     },
     allowOutsideClick: () => !Swal.isLoading()
     }).then(result => {
-      if(result.isConfirmed) {
-        this.setState({redirect: formatRoute(FOTOS_CARGADAS) })
+      if(result.isConfirmed) {Swal.fire({
+            title: 'Se han procesado las imagenes',
+            text: '¿Continuar?',
+            icon: 'success'
+        }).then(result => {
+          this.setState({redirect: formatRoute(FOTOS_CARGADAS) })
+        })
       }
     })
   }
@@ -383,11 +388,12 @@ import { FOTOS_CARGADAS } from '../utils/NamedRoutes';
 const mapStateToProps =({ camaraReducer, estacionReducer, colaboradorReducer, fotoReducer}) => {return { ...camaraReducer, ...estacionReducer, ...colaboradorReducer, ...fotoReducer }}
 
 const { fetchColaboradores } = colaboradorActions
-const { setUploadedFotos } = fotosActions
+const { setUploadedFotos, setPredictions } = fotosActions
 
 const mapDispatchToProps = {
   fetchColaboradores,
-  setUploadedFotos
+  setUploadedFotos,
+  setPredictions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

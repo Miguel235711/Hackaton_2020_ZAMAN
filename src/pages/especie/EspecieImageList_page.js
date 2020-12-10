@@ -22,7 +22,7 @@ class EspecieImageList extends Component {
 
   showList() {
     return this.props.uploaded_fotos.map((item, key) =>{
-    if(key >= 3) {
+    if(key >= 8) {
         return (
             <div className="card my-4" key={key}>
                 <div className="list-card-body col-md-12">

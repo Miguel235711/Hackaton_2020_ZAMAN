@@ -1,12 +1,15 @@
+import { bindActionCreators } from 'redux'
 import {
     GET_FOTOS,
     ADD_FOTO,
-    SET_UPLOADED_FOTOS
+    SET_UPLOADED_FOTOS,
+    SET_PREDICTIONS
 } from './fotoTypes'
 
 const INITIAL_STATE = {
     fotos: [],
-    uploaded_fotos: []
+    uploaded_fotos: [],
+    predictions: [],
 }
 
 const fotoReducer = (state = INITIAL_STATE, action) => {
@@ -25,6 +28,11 @@ const fotoReducer = (state = INITIAL_STATE, action) => {
             return{
                 ...state,
                 uploaded_fotos: action.payload
+            }
+        case SET_PREDICTIONS:
+            return {
+                ...state,
+                predictions: action.payload
             }
         default: return state
     }

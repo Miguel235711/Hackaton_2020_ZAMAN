@@ -2,7 +2,8 @@ import firebase from '../../firebase';
 import {
     GET_FOTOS,
     ADD_FOTO,
-    SET_UPLOADED_FOTOS
+    SET_UPLOADED_FOTOS,
+    SET_PREDICTIONS
 } from './fotoTypes';
 
 
@@ -40,5 +41,12 @@ export const setUploadedFotos = (fotos) => dispatch => {
     dispatch({
         type: SET_UPLOADED_FOTOS,
         payload: fotos
+    })
+}
+
+export const setPredictions = predictions => dispatch => {
+    dispatch({
+        type: SET_PREDICTIONS,
+        payload: predictions
     })
 }

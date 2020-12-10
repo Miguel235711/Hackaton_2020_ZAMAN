@@ -62,6 +62,60 @@ class ImageList extends Component {
     )}})
   }
 
+  showList3(fotosEspecie) {
+    console.log(fotosEspecie)
+    fotosEspecie.map( (item) => {
+      console.log(item)
+      return (
+        <div className="card my-4" key={item.name}>
+            <div className="list-card-body col-md-12">
+                <div className="list-img col-md-3" data-toggle="modal" data-target="#Modal-img" onClick={() => this.setState({img: item.uri})}>
+                  <img src={item.uri} alt='Selected logo'/>
+                </div>
+                <div className="list-card-content p-3 col-md-9">
+                    <div onClick={()=>{}} style={{cursor:'pointer'}}>
+                        <span className="d-block list-card-title"> { item.name } </span>
+                        <span className="d-block list-card-title"> { this.getDate(item.lastModifiedDate) } </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )})
+  }
+
+  showLists = () => {
+    const { predictions } = this.props
+    return (
+      Object.keys(predictions).map( especie_key => {
+        if(predictions[especie_key].length) return (
+          <div>
+            <div className="d-flex justify-content-between">
+              <span>{predictions[especie_key].length} imagenes de {especie_key}</span>
+              <Link className="btn-1" to={formatRoute(EXPECIE_IMAGENES)}>Guardar</Link>
+            </div>
+            { predictions[especie_key].map( (item) => {
+                return (
+                  <div className="card my-4" key={item.name}>
+                      <div className="list-card-body col-md-12">
+                          <div className="list-img col-md-3" data-toggle="modal" data-target="#Modal-img" onClick={() => this.setState({img: item.uri})}>
+                            <img src={item.uri} alt='Selected logo'/>
+                          </div>
+                          <div className="list-card-content p-3 col-md-9">
+                              <div onClick={()=>{}} style={{cursor:'pointer'}}>
+                                  <span className="d-block list-card-title"> { item.name } </span>
+                                  <span className="d-block list-card-title"> { this.getDate(item.lastModifiedDate) } </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              )})
+             }
+          </div>
+        )
+      })
+    )
+  }
+
   render() {
     return (
       <div className="main-cont">
@@ -74,16 +128,9 @@ class ImageList extends Component {
           </div>
           <div className="d-flex justify-content-center">
             <div className="list-card"> 
-              <div className="d-flex justify-content-between">
-                <span>3 imagenes de puma</span>
-                <Link className="btn-1" to={formatRoute(EXPECIE_IMAGENES)}>Guardar</Link>
-              </div>
-              {(this.props.uploaded_fotos ) ? this.showList() : '' }
-              <div className="d-flex justify-content-between">
-                <span>3 imagenes inutiles</span>
-                <button className="btn-1">Descartar</button>
-              </div>
-              {(this.props.uploaded_fotos ) ? this.showList2() : '' }
+              {
+                this.showLists()
+              } 
             </div>
           </div>
         </div>
